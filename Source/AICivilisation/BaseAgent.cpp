@@ -45,7 +45,7 @@ void ABaseAgent::Tick( float DeltaTime )
 	}
 
 	if (IsDead()) {
-
+		
 		//GetWorld()->DestroyActor(this);
 	}
 }

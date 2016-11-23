@@ -20,7 +20,9 @@ ABaseAgent::ABaseAgent()
 
 	TimeElapsed = 0;
 
-	EnergyLossPerSecond = 1;
+	EnergyLossPerSecond = 0.1;
+
+	IsDead = false;
 }
 
 // Called when the game starts or when spawned
@@ -38,25 +40,46 @@ void ABaseAgent::Tick( float DeltaTime )
 
 	TimeAlive += DeltaTime;
 
-	if (TimeElapsed > 1) {
-		TimeElapsed--;
 
-		Energy -= EnergyLossPerSecond;
-	}
+	if (!IsDead) {
+		if (TimeElapsed > 1) {
+			TimeElapsed--;
 
-	if (IsDead()) {
-		
-		//GetWorld()->DestroyActor(this);
-	}
+			Energy -= EnergyLossPerSecond;
+		}
+
+		if (CheckIsDead()) {
+			IsDead = true;
+			GetMesh()->SetSimulatePhysics(true);
+
+			//Dispatch Ondeath event
+			OnDeath();
+		}
+	}	
 }
 
 // Called to bind functionality to input
 void ABaseAgent::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
 	Super::SetupPlayerInputComponent(InputComponent);
-
 }
 
-bool ABaseAgent::IsDead(){
-	return Health == 0 || Energy == 0;
+bool ABaseAgent::CheckIsDead(){
+	return Health <= 0;
+}
+
+void ABaseAgent::TakeDamage(int32 dmg) {
+	Health -= dmg;
+}
+
+void ABaseAgent::Kill() {
+	Health = 0;
+}
+
+void ABaseAgent::OnDeath_Implementation() {
+
+	
+}
+
+void ABaseAgent::GetViewingArc() {
 }

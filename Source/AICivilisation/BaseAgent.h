@@ -13,6 +13,7 @@ class AICIVILISATION_API ABaseAgent : public ACharacter
 private:
 	float TimeElapsed;
 	float EnergyLossPerSecond;
+	virtual bool CheckIsDead();
 	
 public:
 	// Sets default values for this character's properties
@@ -27,14 +28,33 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
-	UPROPERTY(BlueprintReadOnly, Category="Status")
+	UPROPERTY(BlueprintReadWrite, Category = "Vision")
+	float ViewDistance;
+	UPROPERTY(BlueprintReadWrite, Category = "Vision")
+	float FieldOFView;
+
+	UFUNCTION(Category = "Vision")
+	virtual void GetViewingArc();
+
+	UPROPERTY(BlueprintReadWrite, Category="Status")
 	float Health;
-	UPROPERTY(BlueprintReadOnly, Category = "Status")
+	UPROPERTY(BlueprintReadWrite, Category = "Status")
 	float Energy;
+	UPROPERTY(BlueprintReadOnly, Category = "Status")
+	bool IsDead;
+
 	UPROPERTY(BlueprintReadWrite, Category = "Information")
 	float Age;
 
 	float TimeAlive;
 
-	virtual bool IsDead();
+	UFUNCTION(BlueprintNativeEvent, Category = "Status")
+	void OnDeath();
+
+	UFUNCTION(BlueprintCallable, Category = "Status")
+	virtual void TakeDamage(int32 dmg);
+	
+	UFUNCTION(BlueprintCallable, Category = "Status")
+	virtual void Kill();
+
 };

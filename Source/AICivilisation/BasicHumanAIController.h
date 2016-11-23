@@ -15,5 +15,5 @@ class AICIVILISATION_API ABasicHumanAIController : public AAIController
 	
 	
 	
-	
+	void CheckForFood();
 };

@@ -4,5 +4,7 @@
 #include "BasicHumanAIController.h"
 
 
+void ABasicHumanAIController::CheckForFood() {
 
+}
 
